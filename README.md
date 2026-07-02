@@ -1,6 +1,6 @@
-# Planta Baixa — Oficina de Pintura
+# Planta Baixa
 
-Ferramenta web interativa para desenhar e organizar a planta baixa de uma oficina de pintura. Permite montar o layout dos ambientes do galpão diretamente no navegador, sem necessidade de instalar nenhum programa.
+Ferramenta web interativa para desenhar e organizar a planta baixa de um espaço. Permite montar o layout dos ambientes diretamente no navegador, sem necessidade de instalar nenhum programa. Ao abrir, o projeto já vem com um exemplo de layout preenchido, que pode ser totalmente renomeado, movido e redimensionado conforme a sua necessidade.
 
 ## Acesse online
 
