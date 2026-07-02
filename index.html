@@ -36,7 +36,13 @@
     background:linear-gradient(180deg,#1b2c35,#16232b);
   }
   .brand{display:flex;align-items:baseline;gap:10px;margin-right:auto}
-  .brand h1{font-size:16px;font-weight:600;letter-spacing:.3px;margin:0}
+  .brand h1{
+    font-size:16px;font-weight:600;letter-spacing:.3px;margin:0;
+    padding:3px 7px;border-radius:6px;border:1px solid transparent;
+    cursor:text;outline:none;max-width:40vw;
+  }
+  .brand h1:hover{border-color:var(--line)}
+  .brand h1:focus{border-color:var(--accent);background:var(--panel)}
   .brand .tag{font-size:11px;color:var(--accent);letter-spacing:2px;text-transform:uppercase}
   .dims{display:flex;align-items:center;gap:8px;color:var(--text-dim);font-size:13px}
   .dims input{
@@ -161,7 +167,7 @@
 <header>
   <div class="brand">
     <span class="tag">Planta Baixa</span>
-    <h1>Oficina de Pintura</h1>
+    <h1 id="projectName" contenteditable="true" spellcheck="false" title="Clique para editar o nome do projeto">Oficina de Pintura</h1>
   </div>
   <div class="dims">
     <span>Galpão</span>
@@ -273,6 +279,22 @@ let snap = true;
 const stage=document.getElementById('stage'), wrap=document.getElementById('wrap'),
       paper=document.getElementById('paper'), aside=document.getElementById('aside');
 const gWEl=document.getElementById('gW'), gLEl=document.getElementById('gL');
+const projectNameEl=document.getElementById('projectName');
+let projectName = projectNameEl.textContent.trim() || 'Planta sem nome';
+
+function setProjectName(name){
+  projectName = (name||'').trim() || 'Planta sem nome';
+  projectNameEl.textContent = projectName;
+}
+function safeFileName(name){
+  let s=(name||'planta').trim().replace(/[\\/:*?"<>|]/g,'-').replace(/\s+/g,' ').trim().replace(/[. ]+$/,'');
+  return s || 'planta';
+}
+projectNameEl.addEventListener('input',()=>{ projectName = projectNameEl.textContent.trim() || 'Planta sem nome'; });
+projectNameEl.addEventListener('blur',()=>{ setProjectName(projectNameEl.textContent); });
+projectNameEl.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){ e.preventDefault(); projectNameEl.blur(); }
+});
 
 function computeScale(){
   const availW = stage.clientWidth - 90;
@@ -413,8 +435,8 @@ function deleteSelected(){
 document.getElementById('delBtn').onclick=deleteSelected;
 document.addEventListener('keydown',e=>{
   if(e.key!=='Delete' && e.key!=='Backspace') return;
-  const tag=document.activeElement?.tagName;
-  if(tag==='INPUT' || tag==='TEXTAREA') return;
+  const active=document.activeElement;
+  if(active && (active.tagName==='INPUT' || active.tagName==='TEXTAREA' || active.isContentEditable)) return;
   e.preventDefault();
   deleteSelected();
 });
@@ -440,10 +462,10 @@ document.getElementById('mPanel').onclick=()=>document.body.classList.toggle('pa
 
 // ---- salvar / abrir ----
 document.getElementById('saveBtn').onclick=()=>{
-  const data=JSON.stringify({galpao,rooms,nextId},null,2);
+  const data=JSON.stringify({name:projectName,galpao,rooms,nextId},null,2);
   const b=new Blob([data],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(b);
-  a.download='planta-oficina.json'; a.click();
+  a.download=safeFileName(projectName)+'.json'; a.click();
 };
 document.getElementById('loadBtn').onclick=()=>document.getElementById('fileIn').click();
 document.getElementById('fileIn').addEventListener('change',e=>{
@@ -451,7 +473,9 @@ document.getElementById('fileIn').addEventListener('change',e=>{
   const rd=new FileReader();
   rd.onload=()=>{try{const d=JSON.parse(rd.result);
     if(d.galpao&&d.rooms){galpao=d.galpao;rooms=d.rooms;nextId=d.nextId||(Math.max(0,...rooms.map(r=>r.id))+1);
-      gWEl.value=galpao.w;gLEl.value=galpao.l;selId=null;render();}
+      gWEl.value=galpao.w;gLEl.value=galpao.l;selId=null;
+      setProjectName(f.name.replace(/\.json$/i,''));
+      render();}
   }catch(err){alert('Arquivo inválido.');}};
   rd.readAsText(f); e.target.value='';
 });
@@ -485,7 +509,7 @@ document.getElementById('pngBtn').onclick=()=>{
   // moldura
   x.strokeStyle='#16232b'; x.lineWidth=2.5; x.strokeRect(0,0,W,L);
   const a=document.createElement('a'); a.href=cv.toDataURL('image/png');
-  a.download='planta-oficina.png'; a.click();
+  a.download=safeFileName(projectName)+'.png'; a.click();
 };
 
 window.addEventListener('resize',render);
