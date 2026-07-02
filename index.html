@@ -406,9 +406,18 @@ document.getElementById('rotBtn').onclick=()=>{
   const nw=r.h, nh=r.w;
   if(r.x+nw<=galpao.w && r.y+nh<=galpao.l){r.w=nw;r.h=nh;render();}
 };
-document.getElementById('delBtn').onclick=()=>{
+function deleteSelected(){
+  if(selId==null) return;
   rooms=rooms.filter(x=>x.id!==selId); selId=null; render();
-};
+}
+document.getElementById('delBtn').onclick=deleteSelected;
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Delete' && e.key!=='Backspace') return;
+  const tag=document.activeElement?.tagName;
+  if(tag==='INPUT' || tag==='TEXTAREA') return;
+  e.preventDefault();
+  deleteSelected();
+});
 document.getElementById('addBtn').onclick=()=>{
   const c=COLORS[rooms.length%COLORS.length];
   const r={id:nextId++,name:"Novo ambiente",c,x:0.5,y:0.5,w:3,h:3};
