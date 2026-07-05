@@ -18,6 +18,8 @@ Ferramenta web interativa para desenhar e organizar a planta baixa de um espaço
 - Salvar o projeto no navegador (`localStorage`), com carregamento automático desses dados sempre que a página é aberta
 - Salvamento automático das alterações a cada 2 minutos, sem precisar clicar em nada
 - Baixar o projeto em um arquivo **JSON** e reabri-lo depois (em qualquer navegador/dispositivo) para continuar editando
+- Limpar os dados salvos no navegador e restaurar o exemplo padrão
+- Desfazer (Ctrl+Z / Cmd+Z) as últimas 5 alterações — mover, redimensionar, renomear, recolorir, adicionar/excluir ambientes, mudar as dimensões do galpão, abrir um arquivo ou limpar os dados
 - Layout responsivo, com painel lateral colapsável em telas menores
 
 ## Como usar
@@ -29,7 +31,9 @@ Ferramenta web interativa para desenhar e organizar a planta baixa de um espaço
 5. Use **Salvar** para gravar o projeto no navegador (isso também acontece automaticamente a cada 2 minutos). Ao reabrir a página, o último projeto salvo é carregado automaticamente.
 6. Use **Baixar** para exportar o arquivo `.json` do projeto e **Abrir** para carregar um projeto salvo anteriormente a partir de um arquivo.
 7. Use **PNG** para exportar a planta finalizada como imagem.
+8. Use **Limpar** para apagar os dados salvos no navegador e voltar ao exemplo padrão (pede confirmação antes de aplicar).
+9. Errou algo? Pressione **Ctrl+Z** (ou **Cmd+Z** no Mac) para desfazer — funciona para as últimas 5 alterações feitas na sessão.
 
 Como o salvamento no navegador usa `localStorage`, os dados ficam disponíveis apenas naquele navegador/dispositivo — use **Baixar** para criar um backup do projeto ou para transferi-lo para outro computador.
 
-O arquivo é 100% estático (HTML/CSS/JavaScript), hospedado via GitHub Pages a partir do arquivo [`index.html`](index.html) na raiz deste repositório.
+O projeto é 100% estático, hospedado via GitHub Pages a partir da raiz deste repositório: [`index.html`](index.html) (estrutura), [`styles.css`](styles.css) (estilos) e [`app.js`](app.js) (lógica).
