@@ -60,13 +60,30 @@ header{
 /* ---------- Layout ---------- */
 main{flex:1;display:flex;min-height:0}
 .stage{
-  flex:1;position:relative;overflow:auto;padding:34px;
+  flex:1;position:relative;overflow:hidden;padding:34px;
   background:
     radial-gradient(circle at 20% 10%,#1d2f38,transparent 60%),
     var(--board);
   display:flex;align-items:center;justify-content:center;
+  cursor:grab;touch-action:none;
 }
+.stage.panning{cursor:grabbing}
 .paper-wrap{position:relative;filter:drop-shadow(0 24px 40px rgba(0,0,0,.45))}
+
+/* ---------- Controles de zoom ---------- */
+.zoom-controls{
+  position:absolute;right:18px;bottom:18px;display:flex;align-items:stretch;
+  background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);overflow:hidden;z-index:10;
+}
+.zbtn{
+  background:transparent;border:none;color:var(--text);cursor:pointer;
+  font-family:inherit;font-size:16px;line-height:1;padding:9px 14px;
+  transition:.15s;
+}
+.zbtn:hover{background:var(--panel-2)}
+.zbtn+.zbtn{border-left:1px solid var(--line)}
+#zoomLabel{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--text-dim);min-width:38px;display:inline-block;text-align:center}
 .paper{
   position:relative;background:var(--paper);border:2px solid var(--ink);
   background-image:

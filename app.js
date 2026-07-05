@@ -84,6 +84,30 @@ function computeScale(){
 }
 function snapV(v){ return snap ? Math.round(v/0.5)*0.5 : Math.round(v*100)/100; }
 
+// ---- zoom / mover a visualização ----
+const ZOOM_MIN=0.4, ZOOM_MAX=3, ZOOM_STEP=0.2;
+let zoom=1, panX=0, panY=0;
+const zoomLabelEl=document.getElementById('zoomLabel');
+function applyViewTransform(){
+  wrap.style.transform=`translate(${panX}px, ${panY}px) scale(${zoom})`;
+}
+function setZoom(z){
+  zoom=Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z));
+  zoomLabelEl.textContent=Math.round(zoom*100)+'%';
+  applyViewTransform();
+}
+function resetView(){
+  panX=0; panY=0;
+  setZoom(1);
+}
+document.getElementById('zoomInBtn').onclick=()=>setZoom(zoom+ZOOM_STEP);
+document.getElementById('zoomOutBtn').onclick=()=>setZoom(zoom-ZOOM_STEP);
+document.getElementById('zoomResetBtn').onclick=resetView;
+stage.addEventListener('wheel',e=>{
+  e.preventDefault();
+  setZoom(zoom + (e.deltaY<0 ? ZOOM_STEP/2 : -ZOOM_STEP/2));
+}, {passive:false});
+
 function render(){
   computeScale();
   const W = galpao.w*pxPerM, L = galpao.l*pxPerM;
@@ -124,7 +148,7 @@ function attachDrag(el,r){
     const sx=e.clientX, sy=e.clientY, ox=r.x, oy=r.y;
     const preSnap=snapshotState(); let moved=false;
     const move=ev=>{
-      let nx=ox+(ev.clientX-sx)/pxPerM, ny=oy+(ev.clientY-sy)/pxPerM;
+      let nx=ox+(ev.clientX-sx)/(pxPerM*zoom), ny=oy+(ev.clientY-sy)/(pxPerM*zoom);
       nx=snapV(nx); ny=snapV(ny);
       nx=Math.max(0,Math.min(nx,galpao.w-r.w));
       ny=Math.max(0,Math.min(ny,galpao.l-r.h));
@@ -145,7 +169,7 @@ function attachDrag(el,r){
     const sx=e.clientX, sy=e.clientY, ow=r.w, oh=r.h;
     const preSnap=snapshotState(); let resized=false;
     const move=ev=>{
-      let nw=snapV(ow+(ev.clientX-sx)/pxPerM), nh=snapV(oh+(ev.clientY-sy)/pxPerM);
+      let nw=snapV(ow+(ev.clientX-sx)/(pxPerM*zoom)), nh=snapV(oh+(ev.clientY-sy)/(pxPerM*zoom));
       nw=Math.max(0.5,Math.min(nw,galpao.w-r.x)); nh=Math.max(0.5,Math.min(nh,galpao.l-r.y));
       if(nw!==ow||nh!==oh) resized=true;
       r.w=nw; r.h=nh;
@@ -293,7 +317,28 @@ function setGalpao(){
 gWEl.addEventListener('change',setGalpao); gLEl.addEventListener('change',setGalpao);
 document.getElementById('snap').addEventListener('change',e=>snap=e.target.checked);
 
-stage.addEventListener('pointerdown',e=>{ if(e.target===stage||e.target===wrap||e.target===paper){selId=null;render();} });
+let panState=null;
+stage.addEventListener('pointerdown',e=>{
+  if(e.target!==stage && e.target!==wrap && e.target!==paper) return;
+  panState={startX:e.clientX, startY:e.clientY, startPanX:panX, startPanY:panY, moved:false};
+  stage.setPointerCapture(e.pointerId);
+});
+stage.addEventListener('pointermove',e=>{
+  if(!panState) return;
+  const dx=e.clientX-panState.startX, dy=e.clientY-panState.startY;
+  if(!panState.moved && (Math.abs(dx)>3||Math.abs(dy)>3)){ panState.moved=true; stage.classList.add('panning'); }
+  if(panState.moved){
+    panX=panState.startPanX+dx; panY=panState.startPanY+dy;
+    applyViewTransform();
+  }
+});
+stage.addEventListener('pointerup',e=>{
+  if(!panState) return;
+  if(!panState.moved){ selId=null; render(); }
+  stage.classList.remove('panning');
+  try{ stage.releasePointerCapture(e.pointerId); }catch(err){}
+  panState=null;
+});
 
 document.getElementById('mPanel').onclick=()=>document.body.classList.toggle('panel-open');
 

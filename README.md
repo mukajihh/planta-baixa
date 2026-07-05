@@ -13,6 +13,7 @@ Ferramenta web interativa para desenhar e organizar a planta baixa de um espaço
 - Girar ambientes em 90°
 - Copiar (Ctrl+C) e colar (Ctrl+V) um ambiente, criando uma cópia com o mesmo tamanho no canto superior esquerdo da grade e o nome "&lt;nome&gt; - cópia"
 - Grade de referência com encaixe automático (snap) em incrementos de 0,5 m
+- Zoom (roda do mouse ou botões +/−) e mover a visualização (arrastar o fundo da grade), com botão para redefinir
 - Cálculo automático de área do galpão, área ocupada e área livre/circulação
 - Legenda com a lista de ambientes cadastrados
 - Exportar a planta como imagem **PNG**
@@ -29,12 +30,13 @@ Ferramenta web interativa para desenhar e organizar a planta baixa de um espaço
 2. Ajuste as dimensões do galpão no topo da tela.
 3. Toque em um ambiente para editar nome, cor e medidas no painel lateral.
 4. Arraste o ambiente para movê-lo e use a alça no canto inferior direito para redimensionar.
-5. Com um ambiente selecionado, use **Copiar** (Ctrl+C) e depois **Colar** (Ctrl+V) para duplicá-lo — a cópia mantém o tamanho original e sempre aparece no canto superior esquerdo da grade.
-6. Use **Salvar** para gravar o projeto no navegador (isso também acontece automaticamente a cada 2 minutos). Ao reabrir a página, o último projeto salvo é carregado automaticamente.
-7. Use **Baixar** para exportar o arquivo `.json` do projeto e **Abrir** para carregar um projeto salvo anteriormente a partir de um arquivo.
-8. Use **PNG** para exportar a planta finalizada como imagem.
-9. Use **Limpar** para apagar os dados salvos no navegador e voltar ao exemplo padrão (pede confirmação antes de aplicar).
-10. Errou algo? Pressione **Ctrl+Z** (ou **Cmd+Z** no Mac) para desfazer — funciona para as últimas 5 alterações feitas na sessão.
+5. Use a roda do mouse (ou os botões **+**/**−** no canto inferior direito da grade) para dar zoom, e arraste o fundo da grade para mover a visualização. Clique no percentual para redefinir o zoom e a posição.
+6. Com um ambiente selecionado, use **Copiar** (Ctrl+C) e depois **Colar** (Ctrl+V) para duplicá-lo — a cópia mantém o tamanho original e sempre aparece no canto superior esquerdo da grade.
+7. Use **Salvar** para gravar o projeto no navegador (isso também acontece automaticamente a cada 2 minutos). Ao reabrir a página, o último projeto salvo é carregado automaticamente.
+8. Use **Baixar** para exportar o arquivo `.json` do projeto e **Abrir** para carregar um projeto salvo anteriormente a partir de um arquivo.
+9. Use **PNG** para exportar a planta finalizada como imagem.
+10. Use **Limpar** para apagar os dados salvos no navegador e voltar ao exemplo padrão (pede confirmação antes de aplicar).
+11. Errou algo? Pressione **Ctrl+Z** (ou **Cmd+Z** no Mac) para desfazer — funciona para as últimas 5 alterações feitas na sessão.
 
 Como o salvamento no navegador usa `localStorage`, os dados ficam disponíveis apenas naquele navegador/dispositivo — use **Baixar** para criar um backup do projeto ou para transferi-lo para outro computador.
 
