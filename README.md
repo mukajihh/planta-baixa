@@ -1,6 +1,6 @@
 # Planta Baixa
 
-Ferramenta web interativa para desenhar e organizar a planta baixa de um espaço. Permite montar o layout dos ambientes diretamente no navegador, sem necessidade de instalar nenhum programa. Ao abrir, o projeto já vem com um exemplo de layout preenchido, que pode ser totalmente renomeado, movido e redimensionado conforme a sua necessidade.
+Ferramenta web interativa para desenhar e organizar a planta baixa de um espaço. Permite montar o layout dos ambientes diretamente no navegador, sem necessidade de instalar nenhum programa. Ao abrir, o projeto busca automaticamente algum layout salvo anteriormente no navegador; se não encontrar nenhum, carrega um exemplo de layout preenchido, que pode ser totalmente renomeado, movido e redimensionado conforme a sua necessidade.
 
 ## Acesse online
 
@@ -15,7 +15,9 @@ Ferramenta web interativa para desenhar e organizar a planta baixa de um espaço
 - Cálculo automático de área do galpão, área ocupada e área livre/circulação
 - Legenda com a lista de ambientes cadastrados
 - Exportar a planta como imagem **PNG**
-- Salvar o projeto em um arquivo **JSON** e reabri-lo depois para continuar editando
+- Salvar o projeto no navegador (`localStorage`), com carregamento automático desses dados sempre que a página é aberta
+- Salvamento automático das alterações a cada 2 minutos, sem precisar clicar em nada
+- Baixar o projeto em um arquivo **JSON** e reabri-lo depois (em qualquer navegador/dispositivo) para continuar editando
 - Layout responsivo, com painel lateral colapsável em telas menores
 
 ## Como usar
@@ -24,7 +26,10 @@ Ferramenta web interativa para desenhar e organizar a planta baixa de um espaço
 2. Ajuste as dimensões do galpão no topo da tela.
 3. Toque em um ambiente para editar nome, cor e medidas no painel lateral.
 4. Arraste o ambiente para movê-lo e use a alça no canto inferior direito para redimensionar.
-5. Use **Salvar** para baixar o arquivo `.json` do projeto e **Abrir** para carregar um projeto salvo anteriormente.
-6. Use **PNG** para exportar a planta finalizada como imagem.
+5. Use **Salvar** para gravar o projeto no navegador (isso também acontece automaticamente a cada 2 minutos). Ao reabrir a página, o último projeto salvo é carregado automaticamente.
+6. Use **Baixar** para exportar o arquivo `.json` do projeto e **Abrir** para carregar um projeto salvo anteriormente a partir de um arquivo.
+7. Use **PNG** para exportar a planta finalizada como imagem.
+
+Como o salvamento no navegador usa `localStorage`, os dados ficam disponíveis apenas naquele navegador/dispositivo — use **Baixar** para criar um backup do projeto ou para transferi-lo para outro computador.
 
 O arquivo é 100% estático (HTML/CSS/JavaScript), hospedado via GitHub Pages a partir do arquivo [`index.html`](index.html) na raiz deste repositório.

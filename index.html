@@ -186,7 +186,11 @@
   </button>
   <button class="btn" id="saveBtn">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2zM7 3v5h8"/></svg>
-    Salvar
+    <span id="saveBtnLabel">Salvar</span>
+  </button>
+  <button class="btn" id="downloadBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+    Baixar
   </button>
   <button class="btn" id="loadBtn">Abrir</button>
   <button class="btn mobile-panel-btn" id="mPanel">Editar</button>
@@ -241,7 +245,7 @@
     <div class="sec">
       <h2>Ambientes</h2>
       <div class="legend" id="legend"></div>
-      <p class="hint">Esta é uma sugestão inicial. Renomeie, mova e redimensione tudo conforme a realidade do seu galpão. Depois use <b>Salvar</b> para guardar o arquivo e <b>Abrir</b> para continuar de onde parou.</p>
+      <p class="hint">Esta é uma sugestão inicial. Renomeie, mova e redimensione tudo conforme a realidade do seu galpão. Use <b>Salvar</b> para guardar no navegador (também salvo automaticamente a cada 2 minutos), <b>Baixar</b> para exportar um arquivo JSON de backup e <b>Abrir</b> para carregar um arquivo salvo anteriormente.</p>
     </div>
   </aside>
 </main>
@@ -460,9 +464,41 @@ stage.addEventListener('pointerdown',e=>{ if(e.target===stage||e.target===wrap||
 
 document.getElementById('mPanel').onclick=()=>document.body.classList.toggle('panel-open');
 
-// ---- salvar / abrir ----
+// ---- salvar (localStorage) / baixar (arquivo) / abrir ----
+const STORAGE_KEY='plantaBaixa:autosave';
+
+function getStateObject(){
+  return {name:projectName, galpao, rooms, nextId};
+}
+function saveToLocalStorage(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(getStateObject())); return true; }
+  catch(err){ return false; }
+}
+function loadFromLocalStorage(){
+  let raw;
+  try{ raw=localStorage.getItem(STORAGE_KEY); }catch(err){ return false; }
+  if(!raw) return false;
+  try{
+    const d=JSON.parse(raw);
+    if(!d||!d.galpao||!d.rooms) return false;
+    galpao=d.galpao; rooms=d.rooms; nextId=d.nextId||(Math.max(0,...rooms.map(r=>r.id))+1);
+    gWEl.value=galpao.w; gLEl.value=galpao.l; selId=null;
+    setProjectName(d.name);
+    return true;
+  }catch(err){ return false; }
+}
+
 document.getElementById('saveBtn').onclick=()=>{
-  const data=JSON.stringify({name:projectName,galpao,rooms,nextId},null,2);
+  const ok=saveToLocalStorage();
+  const label=document.getElementById('saveBtnLabel');
+  const prev=label.textContent;
+  label.textContent = ok ? 'Salvo!' : 'Erro ao salvar';
+  setTimeout(()=>{label.textContent=prev;},1500);
+};
+setInterval(saveToLocalStorage, 2*60*1000);
+
+document.getElementById('downloadBtn').onclick=()=>{
+  const data=JSON.stringify(getStateObject(),null,2);
   const b=new Blob([data],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(b);
   a.download=safeFileName(projectName)+'.json'; a.click();
@@ -512,6 +548,7 @@ document.getElementById('pngBtn').onclick=()=>{
   a.download=safeFileName(projectName)+'.png'; a.click();
 };
 
+loadFromLocalStorage();
 window.addEventListener('resize',render);
 render();
 </script>
