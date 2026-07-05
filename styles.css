@@ -50,6 +50,7 @@ header{
   font-family:inherit;
 }
 .btn:hover{background:var(--panel-2);border-color:#4a6a77}
+.btn:disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
 .btn.primary{background:var(--accent);color:#2a1c00;border-color:var(--accent);font-weight:600}
 .btn.primary:hover{background:#ffc247}
 .btn svg{width:15px;height:15px}
@@ -100,7 +101,7 @@ main{flex:1;display:flex;min-height:0}
 }
 .room .r-dim{
   font-family:"IBM Plex Mono",monospace;font-size:10px;color:#31434c;opacity:.85;
-  margin-top:2px;pointer-events:none
+  text-align:center;padding:0 4px;margin-top:2px;pointer-events:none
 }
 .handle{
   position:absolute;right:-1px;bottom:-1px;width:16px;height:16px;cursor:nwse-resize;

@@ -23,6 +23,10 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
     Ambiente
   </button>
+  <button class="btn" id="pasteBtn" disabled title="Cola o último ambiente copiado no canto superior esquerdo (Ctrl+V)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2"/></svg>
+    Colar
+  </button>
   <button class="btn" id="pngBtn">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
     PNG
@@ -75,6 +79,9 @@
         </div>
         <div class="panel-actions">
           <button class="btn" id="rotBtn" style="flex:1">↻ Girar 90°</button>
+          <button class="btn" id="copyBtn" style="flex:1" title="Copia este ambiente (Ctrl+C)"><span id="copyBtnLabel">Copiar</span></button>
+        </div>
+        <div class="panel-actions">
           <button class="btn" id="delBtn" style="flex:1;border-color:#6b2f28;color:#ffb4a8">Excluir</button>
         </div>
       </div>
@@ -92,7 +99,7 @@
     <div class="sec">
       <h2>Ambientes</h2>
       <div class="legend" id="legend"></div>
-      <p class="hint">Esta é uma sugestão inicial. Renomeie, mova e redimensione tudo conforme a realidade do seu galpão. Use <b>Salvar</b> para guardar no navegador (também salvo automaticamente a cada 2 minutos), <b>Baixar</b> para exportar um arquivo JSON de backup, <b>Abrir</b> para carregar um arquivo salvo anteriormente e <b>Limpar</b> para apagar os dados salvos e voltar ao exemplo padrão. Use <b>Ctrl+Z</b> (ou <b>Cmd+Z</b> no Mac) para desfazer as últimas 5 alterações.</p>
+      <p class="hint">Esta é uma sugestão inicial. Renomeie, mova e redimensione tudo conforme a realidade do seu galpão. Use <b>Salvar</b> para guardar no navegador (também salvo automaticamente a cada 2 minutos), <b>Baixar</b> para exportar um arquivo JSON de backup, <b>Abrir</b> para carregar um arquivo salvo anteriormente e <b>Limpar</b> para apagar os dados salvos e voltar ao exemplo padrão. Use <b>Copiar</b> (Ctrl+C) num ambiente selecionado e <b>Colar</b> (Ctrl+V) para duplicá-lo com o mesmo tamanho no canto superior esquerdo da grade. Use <b>Ctrl+Z</b> (ou <b>Cmd+Z</b> no Mac) para desfazer as últimas 5 alterações.</p>
     </div>
   </aside>
 </main>

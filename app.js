@@ -233,11 +233,43 @@ function deleteSelected(){
   rooms=rooms.filter(x=>x.id!==selId); selId=null; render();
 }
 document.getElementById('delBtn').onclick=deleteSelected;
+
+// ---- copiar / colar ambiente ----
+let clipboardRoom=null;
+function copySelected(){
+  const r=rooms.find(x=>x.id===selId); if(!r) return;
+  clipboardRoom={name:r.name, c:r.c, w:r.w, h:r.h};
+  document.getElementById('pasteBtn').disabled=false;
+  const label=document.getElementById('copyBtnLabel');
+  const prev=label.textContent;
+  label.textContent='Copiado!';
+  setTimeout(()=>{label.textContent=prev;},1200);
+}
+function pasteClipboard(){
+  if(!clipboardRoom) return;
+  pushUndo();
+  const r={
+    id:nextId++,
+    name:clipboardRoom.name+' - cópia',
+    c:clipboardRoom.c,
+    x:0, y:0,
+    w:Math.min(clipboardRoom.w,galpao.w),
+    h:Math.min(clipboardRoom.h,galpao.l),
+  };
+  rooms.push(r); select(r.id); render();
+}
+document.getElementById('copyBtn').onclick=copySelected;
+document.getElementById('pasteBtn').onclick=pasteClipboard;
+
 document.addEventListener('keydown',e=>{
   const active=document.activeElement;
   const isEditable=active && (active.tagName==='INPUT' || active.tagName==='TEXTAREA' || active.isContentEditable);
   const isUndoCombo=(e.metaKey||e.ctrlKey) && !e.shiftKey && (e.key==='z'||e.key==='Z');
+  const isCopyCombo=(e.metaKey||e.ctrlKey) && !e.shiftKey && (e.key==='c'||e.key==='C');
+  const isPasteCombo=(e.metaKey||e.ctrlKey) && !e.shiftKey && (e.key==='v'||e.key==='V');
   if(isUndoCombo && !isEditable){ e.preventDefault(); undo(); return; }
+  if(isCopyCombo && !isEditable && selId!=null){ e.preventDefault(); copySelected(); return; }
+  if(isPasteCombo && !isEditable && clipboardRoom){ e.preventDefault(); pasteClipboard(); return; }
   if(e.key!=='Delete' && e.key!=='Backspace') return;
   if(isEditable) return;
   e.preventDefault();
