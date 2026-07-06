@@ -32,6 +32,8 @@ const stage=document.getElementById('stage'), wrap=document.getElementById('wrap
 const gWEl=document.getElementById('gW'), gLEl=document.getElementById('gL');
 const projectNameEl=document.getElementById('projectName');
 let projectName = projectNameEl.textContent.trim() || 'Planta sem nome';
+function updateTitle(){ document.title = `Planta Baixa: ${projectName}`; }
+updateTitle();
 const DEFAULT_STATE = JSON.parse(JSON.stringify({name:projectName, galpao, rooms, nextId}));
 
 // ---- desfazer (Ctrl+Z / Cmd+Z), até 5 alterações ----
@@ -60,6 +62,7 @@ function undo(){
 function setProjectName(name){
   projectName = (name||'').trim() || 'Planta sem nome';
   projectNameEl.textContent = projectName;
+  updateTitle();
 }
 function safeFileName(name){
   let s=(name||'planta').trim().replace(/[\\/:*?"<>|]/g,'-').replace(/\s+/g,' ').trim().replace(/[. ]+$/,'');
@@ -67,7 +70,7 @@ function safeFileName(name){
 }
 let projectNameUndoSnap=null;
 projectNameEl.addEventListener('focus',()=>{ projectNameUndoSnap=snapshotState(); });
-projectNameEl.addEventListener('input',()=>{ projectName = projectNameEl.textContent.trim() || 'Planta sem nome'; });
+projectNameEl.addEventListener('input',()=>{ projectName = projectNameEl.textContent.trim() || 'Planta sem nome'; updateTitle(); });
 projectNameEl.addEventListener('blur',()=>{
   setProjectName(projectNameEl.textContent);
   if(projectNameUndoSnap && projectNameUndoSnap.name!==projectName) pushUndo(projectNameUndoSnap);
